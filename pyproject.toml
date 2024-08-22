@@ -26,3 +26,9 @@ Homepage = "https://github.com/cujoai/json-type-hints"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/json_hints"]
+
+[tool.ruff]
+lint.select = ["ARG", "E", "F", "I", "PL", "RUF", "SIM", "UP"]
+lint.ignore = ["PLR0913"] # too many function args
+target-version = "py310"
+line-length = 100
