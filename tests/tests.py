@@ -7,6 +7,7 @@ from test_data import (
     INPUT_DICT,
     LOADS_CLS_1_ONLY,
     LOADS_DEFAULT_ONLY,
+    LOADS_STR_BAD_PROP,
     TYPE_DICT_CLS1,
     TYPE_DICT_CLS2,
     TYPE_DICT_FULL,
@@ -67,6 +68,16 @@ class MyTestCase(unittest.TestCase):
     def test_loads_no_parsers_no_raise(self):
         self.assertEqual(loads(DUMPS_STR, raise_on_unknown=False), LOADS_DEFAULT_ONLY)
 
+    def test_loads_no_data(self):
+        with self.assertRaises(TypeError) as cm:
+            loads('{"__type__":"tuple"}')
+        self.assert_exception_msg(cm.exception, "no '__data__'")
+
+    def test_loads_bad_data(self):
+        with self.assertRaises(TypeError) as cm:
+            loads('{"__type__":"tuple","__data__":null}')
+        self.assert_exception_msg(cm.exception, "invalid '__data__'")
+
     def test_loads_hook(self):
         self.assertEqual(loads(DUMPS_STR, object_hook=decode_classes), INPUT_DICT)
 
@@ -82,6 +93,11 @@ class MyTestCase(unittest.TestCase):
 
     def test_loads_dict(self):
         self.assertEqual(loads(DUMPS_STR, hinted_types=TYPE_DICT_FULL), INPUT_DICT)
+
+    def test_loads_dict_bad_data(self):
+        with self.assertRaises(TypeError) as cm:
+            loads(LOADS_STR_BAD_PROP, hinted_types=TYPE_DICT_FULL)
+        self.assert_exception_msg(cm.exception, "invalid '__data__'")
 
     def test_loads_dict_cls1_raise(self):
         with self.assertRaises(TypeError) as cm:

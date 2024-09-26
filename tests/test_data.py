@@ -55,3 +55,4 @@ LOADS_CLS_1_ONLY = {
         },
     },
 }
+LOADS_STR_BAD_PROP = f'{{"__type__":"{CLS_NAME_1}","__data__":{{"bad_prop":1}}}}'

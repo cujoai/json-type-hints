@@ -70,14 +70,19 @@ def loads(
         if "__type__" not in obj:
             return obj
         _type = obj["__type__"]
-        if _type == "bytes":
-            return base64.b64decode(obj["__data__"])
-        if _type == "tuple":
-            return tuple(obj["__data__"])
-        if hinted_types and _type in hinted_types:
-            return hinted_types[_type](**obj["__data__"])
+        if "__data__" not in obj:
+            raise TypeError(f"'__type__':'{_type}' has no '__data__'")
+        try:
+            if _type == "bytes":
+                return base64.b64decode(obj["__data__"])
+            if _type == "tuple":
+                return tuple(obj["__data__"])
+            if hinted_types and _type in hinted_types:
+                return hinted_types[_type](**obj["__data__"])
+        except TypeError as e:
+            raise TypeError(f"invalid '__data__' for '__type__':'{_type}'. {e}")
         if not raise_on_unknown:
             return obj
-        raise TypeError(f"'__type__': '{_type}' is not a supported data type")
+        raise TypeError(f"'__type__':'{_type}' is not a supported data type")
 
     return json.loads(s=s, object_hook=decode_hinted)
