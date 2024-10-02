@@ -19,9 +19,9 @@ def dumps(
     ``{'__type__': 'bytes', '__data__': 'base64 encoded bytes'}``.
     :param obj: a Python object.
     :param encode_types: a function that should convert ``obj`` into a
-        ``{'__type__': 'name', '__data__': ...}`` dict or return it unchanged. ``'__data__'``
-        will then be encoded recursively. If recursion is not needed, ``default`` should be used
-        instead.
+        ``{'__type__': 'name', '__data__': ...}`` dict or return it unchanged. ``'__data__'`` can
+        be omitted. If present, it will be encoded recursively. If recursion is not needed,
+        ``default`` should be used instead.
     :param default: a function that should return a serializable version of ``obj`` or raise
         ``TypeError``. The default simply raises ``TypeError``.
     :param separators: ``(item_separator, key_separator)`` tuple. The default is ``(',', ':')``.
