@@ -57,7 +57,9 @@ def loads(
         ``{'__type__': 'name', '__data__': ...}`` dict).
     :param hinted_types: a ``{'name': class}`` dict, used to decode
         ``{'__type__': 'name', '__data__': ...}`` dict. Objects will be created by unpacking
-        ``'__data__'`` into keyword arguments.
+        ``'__data__'`` into keyword arguments, or using it as a positional argument,
+        if ``'__data__'`` is not a dict. When there is no ``'__data__'``, the object will be
+        created without any arguments.
     :return: a Python object.
     """
 
@@ -70,15 +72,17 @@ def loads(
         if "__type__" not in obj:
             return obj
         _type = obj["__type__"]
-        if "__data__" not in obj:
-            raise TypeError(f"'__type__':'{_type}' has no '__data__'")
+        _data = obj.get("__data__", {})
+        _hinted_types = {"tuple": tuple}
+        if hinted_types:
+            _hinted_types.update(hinted_types)
         try:
             if _type == "bytes":
-                return base64.b64decode(obj["__data__"])
-            if _type == "tuple":
-                return tuple(obj["__data__"])
-            if hinted_types and _type in hinted_types:
-                return hinted_types[_type](**obj["__data__"])
+                return base64.b64decode(_data)
+            if _type in _hinted_types:
+                if isinstance(_data, dict):
+                    return _hinted_types[_type](**_data)
+                return _hinted_types[_type](_data)
         except TypeError as e:
             raise TypeError(f"invalid '__data__' for '__type__':'{_type}'. {e}")
         if not raise_on_unknown:
