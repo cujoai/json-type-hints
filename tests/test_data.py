@@ -23,7 +23,7 @@ CLS_NAME_2 = "MyClass2"
 CLS_NAME_3 = "MyClass3"
 TYPE_DICT_CLS1 = {CLS_NAME_1: MyClass1}
 TYPE_DICT_CLS2 = {CLS_NAME_2: MyClass2}
-TYPE_DICT_PARTIAL = {CLS_NAME_1: MyClass1, CLS_NAME_2: MyClass2, CLS_NAME_3: MyClass3}
+TYPE_DICT_PARTIAL = {CLS_NAME_2: MyClass2, CLS_NAME_3: MyClass3}
 TYPE_DICT_FULL = {CLS_NAME_1: MyClass1, CLS_NAME_2: MyClass2, CLS_NAME_3: MyClass3}
 CLASS_1_OBJ_1 = MyClass1(prop1=1, prop2=("bytes1", b"\x01"))
 CLASS_1_OBJ_2 = MyClass1(prop1=2, prop2=("bytes2", b"\x01\x00"))
