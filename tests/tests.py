@@ -26,7 +26,9 @@ def encode_classes(obj):
 
 
 def encode_classes_incomplete(obj):
-    if isinstance(obj, TYPE_DICT_FULL[CLS_NAME_2]):
+    types = TYPE_DICT_FULL.copy()
+    types.pop(CLS_NAME_3)
+    if type(obj) in types.values():
         return {"__type__": type(obj).__name__, "__data__": obj.__dict__}
     return obj
 
@@ -61,7 +63,7 @@ class MyTestCase(unittest.TestCase):
     def test_dumps_incomplete_encoder(self):
         with self.assertRaises(expected_exception=TypeError) as cm:
             dumps(INPUT_DICT, encode_types=encode_classes_incomplete)
-        self.assert_exception_msg(cm.exception, CLS_NAME_1)
+        self.assert_exception_msg(cm.exception, CLS_NAME_3)
 
     def test_loads_no_parsers_raise(self):
         with self.assertRaises(TypeError) as cm:
