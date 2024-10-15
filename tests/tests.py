@@ -50,10 +50,10 @@ class MyTestCase(unittest.TestCase):
         self.assertTrue(expected_msg in str(exception))
 
     def test_dumps(self):
-        self.assertEqual(dumps(INPUT_DICT, encode_types=encode_classes), DUMPS_STR)
+        self.assertEqual(DUMPS_STR, dumps(INPUT_DICT, encode_types=encode_classes))
 
     def test_dumps_partially_encoded(self):
-        self.assertEqual(dumps(LOADS_DEFAULT_ONLY, encode_types=encode_classes), DUMPS_STR)
+        self.assertEqual(DUMPS_STR, dumps(LOADS_DEFAULT_ONLY, encode_types=encode_classes))
 
     def test_dumps_no_encoder(self):
         with self.assertRaises(expected_exception=TypeError) as cm:
@@ -71,7 +71,7 @@ class MyTestCase(unittest.TestCase):
         self.assert_exception_msg(cm.exception)
 
     def test_loads_no_parsers_no_raise(self):
-        self.assertEqual(loads(DUMPS_STR, raise_on_unknown=False), LOADS_DEFAULT_ONLY)
+        self.assertEqual(LOADS_DEFAULT_ONLY, loads(DUMPS_STR, raise_on_unknown=False))
 
     def test_loads_bad_data(self):
         with self.assertRaises(TypeError) as cm:
@@ -79,7 +79,7 @@ class MyTestCase(unittest.TestCase):
         self.assert_exception_msg(cm.exception, "invalid '__data__'")
 
     def test_loads_hook(self):
-        self.assertEqual(loads(DUMPS_STR, object_hook=decode_classes), INPUT_DICT)
+        self.assertEqual(INPUT_DICT, loads(DUMPS_STR, object_hook=decode_classes))
 
     def test_loads_hook_cls1_raise(self):
         with self.assertRaises(TypeError) as cm:
@@ -88,11 +88,11 @@ class MyTestCase(unittest.TestCase):
 
     def test_loads_hook_cls1_no_raise(self):
         self.assertEqual(
-            loads(DUMPS_STR, object_hook=decode_class1, raise_on_unknown=False), LOADS_CLS_1_ONLY
+            LOADS_CLS_1_ONLY, loads(DUMPS_STR, object_hook=decode_class1, raise_on_unknown=False)
         )
 
     def test_loads_dict(self):
-        self.assertEqual(loads(DUMPS_STR, hinted_types=TYPE_DICT_FULL), INPUT_DICT)
+        self.assertEqual(INPUT_DICT, loads(DUMPS_STR, hinted_types=TYPE_DICT_FULL))
 
     def test_loads_dict_bad_data(self):
         with self.assertRaises(TypeError) as cm:
@@ -106,18 +106,18 @@ class MyTestCase(unittest.TestCase):
 
     def test_loads_dict_cls1_no_raise(self):
         self.assertEqual(
-            loads(DUMPS_STR, hinted_types=TYPE_DICT_CLS1, raise_on_unknown=False), LOADS_CLS_1_ONLY
+            LOADS_CLS_1_ONLY, loads(DUMPS_STR, hinted_types=TYPE_DICT_CLS1, raise_on_unknown=False)
         )
 
     def test_loads_dict_and_hook(self):
         self.assertEqual(
-            loads(DUMPS_STR, hinted_types=TYPE_DICT_PARTIAL, object_hook=decode_class1), INPUT_DICT
+            INPUT_DICT, loads(DUMPS_STR, hinted_types=TYPE_DICT_PARTIAL, object_hook=decode_class1)
         )
 
     def test_dumps_and_loads(self):
         self.assertEqual(
-            loads(dumps(INPUT_DICT, encode_types=encode_classes), hinted_types=TYPE_DICT_FULL),
             INPUT_DICT,
+            loads(dumps(INPUT_DICT, encode_types=encode_classes), hinted_types=TYPE_DICT_FULL),
         )
 
 
