@@ -5,13 +5,16 @@ from test_data import (
     CLS_NAME_2,
     CLS_NAME_3,
     DUMPS_STR,
+    DUMPS_STR_2,
     INPUT_DICT,
+    INPUT_DICT_2,
     LOADS_CLS_1_ONLY,
     LOADS_DEFAULT_ONLY,
     LOADS_STR_BAD_PROP,
     TYPE_DICT_CLS1,
     TYPE_DICT_FULL,
     TYPE_DICT_PARTIAL,
+    MyClass4,
 )
 
 from src.json_hints import dumps, loads
@@ -31,6 +34,12 @@ def encode_classes_incomplete(obj):
     if type(obj) in types.values():
         return {"__type__": type(obj).__name__, "__data__": obj.__dict__}
     return obj
+
+
+def encode_default(obj):
+    if isinstance(obj, MyClass4):
+        return obj.value
+    raise TypeError()
 
 
 def decode_classes(obj):
@@ -64,6 +73,10 @@ class MyTestCase(unittest.TestCase):
         with self.assertRaises(expected_exception=TypeError) as cm:
             dumps(INPUT_DICT, encode_types=encode_classes_incomplete)
         self.assert_exception_msg(cm.exception, CLS_NAME_3)
+
+    def test_dumps_encoder_and_default(self):
+        encoded = dumps(INPUT_DICT_2, encode_types=encode_classes, default=encode_default)
+        self.assertEqual(DUMPS_STR_2, encoded)
 
     def test_loads_no_parsers_raise(self):
         with self.assertRaises(TypeError) as cm:
