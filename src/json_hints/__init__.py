@@ -20,8 +20,8 @@ def dumps(
     :param obj: a Python object.
     :param encode_types: a function that should convert ``obj`` into a
         ``{'__type__': 'name', '__data__': ...}`` dict or return it unchanged. ``'__data__'`` can
-        be omitted. If present, it will be encoded recursively. If recursion is not needed,
-        ``default`` should be used instead.
+        be omitted. If present, it will be encoded recursively. For types where a simple convertion
+        to a JSON serializable type is needed, ``default`` must be used instead.
     :param default: a function that should return a serializable version of ``obj`` or raise
         ``TypeError``. The default simply raises ``TypeError``.
     :param separators: ``(item_separator, key_separator)`` tuple. The default is ``(',', ':')``.

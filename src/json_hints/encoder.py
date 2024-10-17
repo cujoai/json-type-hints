@@ -44,11 +44,14 @@ class ExtendedJSONEncoder(json.JSONEncoder):
             if isinstance(item, bytes):
                 return {"__type__": "bytes", "__data__": base64.b64encode(item).decode()}
             if self.encode_types:
-                backup = item
+                backup = type(item)
                 item = self.encode_types(item)
-                if item != backup:
+                if not isinstance(item, backup):
                     if not (isinstance(item, dict) and "__type__" in item):
-                        raise TypeError("encode_types must return a dict with a '__type__' key")
+                        raise TypeError(
+                            "encode_types must return a dict with a '__type__' key "
+                            "or unchanged object"
+                        )
                     if "__data__" in item:
                         item["__data__"] = add_type_hints(item["__data__"])
             return item
